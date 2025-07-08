@@ -225,6 +225,29 @@ def birthdays(args: list[str], book: AddressBook) -> str:
     return "\n".join(result)
 
 
+@input_error
+def delete_contact(args: list[str], book: AddressBook) -> str:
+    """
+    Delete a contact from the address book.
+    
+    Args:
+        args (list[str]): List containing the name of the contact to delete.
+        book (AddressBook): The address book instance.
+        
+    Returns:
+        str: Status message.
+    """
+    if len(args) < 1:
+        raise ValueError("Please provide a contact name. Usage: delete <name>")
+    
+    name = args[0]
+    try:
+        book.delete(name)
+        return f"Contact '{name}' deleted."
+    except KeyError:
+        raise KeyError(f"Contact '{name}' not found")
+
+
 def show_help() -> str:
     """
     Show help information with all available commands and their usage.
@@ -242,6 +265,7 @@ def show_help() -> str:
         add-birthday <name> <DD.MM.YYYY>        - Add birthday to contact
         show-birthday <name>                    - Show contact's birthday
         birthdays                               - Show upcoming birthdays this week
+        delete <name>                           - Delete a contact
         help                                    - Show this help message
         exit/close                              - Exit the program
 
@@ -252,5 +276,6 @@ def show_help() -> str:
         add-birthday John 15.03.1990
         show-birthday John
         birthdays
+        delete John
         all""")
     return help_text.strip()
